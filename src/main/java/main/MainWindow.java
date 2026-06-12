@@ -170,14 +170,14 @@ public class MainWindow extends JFrame {
 		contentPane.add(panel_1);
 		panel_1.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
-		JLabel lblNewLabel_5 = new JLabel("New label");
+		JLabel lblNewLabel_5 = new JLabel("Start date:");
 		panel_1.add(lblNewLabel_5);
 		
 		textField_1 = new JTextField();
 		panel_1.add(textField_1);
 		textField_1.setColumns(10);
 		
-		JLabel lblNewLabel_6 = new JLabel("New label");
+		JLabel lblNewLabel_6 = new JLabel("End date:");
 		panel_1.add(lblNewLabel_6);
 		
 		textField_3 = new JTextField();
@@ -194,7 +194,7 @@ public class MainWindow extends JFrame {
 		gbl_panel.rowWeights = new double[]{0.0, 1.0, Double.MIN_VALUE};
 		panel.setLayout(gbl_panel);
 		
-		JLabel lblNewLabel_7 = new JLabel("New label");
+		JLabel lblNewLabel_7 = new JLabel("Next execution time");
 		GridBagConstraints gbc_lblNewLabel_7 = new GridBagConstraints();
 		gbc_lblNewLabel_7.insets = new Insets(0, 0, 5, 5);
 		gbc_lblNewLabel_7.anchor = GridBagConstraints.EAST;
@@ -211,7 +211,7 @@ public class MainWindow extends JFrame {
 		panel.add(textField_4, gbc_textField_4);
 		textField_4.setColumns(10);
 		
-		JLabel lblNewLabel_8 = new JLabel("New label");
+		JLabel lblNewLabel_8 = new JLabel("Description");
 		GridBagConstraints gbc_lblNewLabel_8 = new GridBagConstraints();
 		gbc_lblNewLabel_8.insets = new Insets(0, 0, 0, 5);
 		gbc_lblNewLabel_8.gridx = 0;
