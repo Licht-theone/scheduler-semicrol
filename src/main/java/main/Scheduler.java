@@ -74,7 +74,7 @@ public class Scheduler {
 			return "Task has expired and won't execute again";
 		}
 		String desc = "Occurs every " + numPeriod + " " + period.stringPeriodo();
-		desc = desc + " Schedule will be used on " + DateFormatter.dateStringGetter(next, false, false) + 
+		desc = desc + " Schedule will be used on " + DateFormatter.dateStringGetter(next, true, true) + 
 				" starting on " + DateFormatter.dateStringGetter(startDateTime, false, false);
 		return desc;
 	}
