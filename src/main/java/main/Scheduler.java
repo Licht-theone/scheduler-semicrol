@@ -1,8 +1,6 @@
 package main;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-
 /**
  * Class that implements the necessary methods to calculate next execution date
  * @author aaron
@@ -72,6 +70,9 @@ public class Scheduler {
 	 */
 	public String occursRecurringText(LocalDateTime currentDateTime) {
 		LocalDateTime next = calculateNextExcetutionTime(currentDateTime);
+		if (next == null) {
+			return "Task has expired and won't execute again";
+		}
 		String desc = "Occurs every " + numPeriod + " " + period.stringPeriodo();
 		desc = desc + " Schedule will be used on " + DateFormatter.dateStringGetter(next, false, false) + 
 				" starting on " + DateFormatter.dateStringGetter(startDateTime, false, false);
@@ -97,7 +98,11 @@ public class Scheduler {
 	 * @return next execution time como localdatetime o null
 	 */
 	public LocalDateTime calculateNextExcetutionTime(LocalDateTime currentDateTime) {
-		return period.calcularSiguiente(currentDateTime, numPeriod);
+		LocalDateTime next = period.calcularSiguiente(currentDateTime, startDateTime,numPeriod);
+		if (finishDateTime != null && next.isAfter(finishDateTime)) {
+			next = null;
+		}
+		return next;
 	}
 	
 }

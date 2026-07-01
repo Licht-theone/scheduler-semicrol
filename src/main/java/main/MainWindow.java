@@ -143,8 +143,17 @@ public class MainWindow extends JFrame {
 						end = DateFormatter.dateFormatterParser(textEndDate.getText());
 					}
 					Period per = (Period) comboBoxOccurs.getSelectedItem();
-					int period = (Integer) spinnerDays.getValue();
+					int periodInt = (Integer) spinnerDays.getValue();
 					LocalDateTime currentDate = DateFormatter.dateFormatterParser(textCurrentDate.getText());
+					Scheduler sch = new Scheduler(start, end, per, periodInt);
+					LocalDateTime next = sch.calculateNextExcetutionTime(currentDate);
+					String desc = sch.occursRecurringText(currentDate);
+					if (next == null) {
+						textNextExecTime.setText("N/A");
+					} else {
+						textNextExecTime.setText(DateFormatter.dateStringGetter(next, false, false));
+					}
+					textAreaDescription.setText(desc);
 				} else {
 					return;
 				}

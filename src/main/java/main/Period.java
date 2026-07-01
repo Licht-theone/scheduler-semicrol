@@ -7,8 +7,12 @@ public enum Period {
 
 	{
 		@Override
-		public LocalDateTime calcularSiguiente(LocalDateTime actual, int n) {
-			return actual.plusDays(n);
+		public LocalDateTime calcularSiguiente(LocalDateTime actual, LocalDateTime inicio, int n) {
+			LocalDateTime siguiente = inicio;
+			while (siguiente.isBefore(actual)) {
+				siguiente = siguiente.plusDays(n);
+			}
+			return siguiente;
 		}
 
 		@Override
@@ -16,7 +20,7 @@ public enum Period {
 			return "day(s).";
 		}
 	};
-	public abstract LocalDateTime calcularSiguiente(LocalDateTime actual, int n);
+	public abstract LocalDateTime calcularSiguiente(LocalDateTime actual, LocalDateTime inicio, int n);
 	
 	public abstract String stringPeriodo();
 }
