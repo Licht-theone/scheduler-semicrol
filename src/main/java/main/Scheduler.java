@@ -1,6 +1,7 @@
 package main;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  * Class that implements the necessary methods to calculate next execution date
@@ -60,14 +61,12 @@ public class Scheduler {
 	}
 	
 	/**
-	 * Method that based on periodicity calculates the next execution time
-	 * @param currentDateTime current date
-	 * @return next execution time as localdatetime or null
+	 * Metodo que en base a la periodicidad calcula la proxima fecha de ejecucion
+	 * @param currentDateTime fecha actual
+	 * @return next execution time como localdatetime o null
 	 */
 	public LocalDateTime calculateNextExcetutionTime(LocalDateTime currentDateTime) {
-		if (period == Period.Once) {
-			return startDateTime;
-		} else if (period == Period.Daily) {
+		if (period == Period.Daily) {
 			return currentDateTime.plusDays(numPeriod);
 		}
 		return null;
