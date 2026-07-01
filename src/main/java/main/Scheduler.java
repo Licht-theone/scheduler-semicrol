@@ -59,31 +59,25 @@ public class Scheduler {
 	}
 	
 	/**
-	 * Metodo que gestiona la logica de periodicidad
-	 * @param startDate fecha de inicio
-	 * @param dateTime fecha de ejecucion
-	 * @param endDate fecha final de ser necesaria
-	 * @param next siguiente fecha de ejecucion
-	 * @param p periodo a usar
-	 * @param n dias, meses, años, semanas, segun el periodo, numero entero
-	 * @return el string a visualizar
+	 * Method that generates the string to display for recurring tasks
+	 * @param currentDateTime current date to calculate next execution date
+	 * @return formatted string to display
 	 */
 	public String occursRecurringText(LocalDateTime currentDateTime) {
 		LocalDateTime next = calculateNextExcetutionTime(currentDateTime);
 		if (next == null) {
 			return "Task has expired and won't execute again";
 		}
-		String desc = "Occurs every " + numPeriod + " " + period.stringPeriodo();
+		String desc = "Occurs every " + numPeriod + " " + period.periodString();
 		desc = desc + " Schedule will be used on " + DateFormatter.dateStringGetter(next, true, true) + 
 				" starting on " + DateFormatter.dateStringGetter(startDateTime, false, false);
 		return desc;
 	}
 	
 	/**
-	 * Metodo que gestiona tareas de una sola vez
-	 * @param startDate fecha de inicio
-	 * @param dateTime fecha de ejecucion
-	 * @return string formateado a mostrar
+	 * Method that generates the string for a one-off task
+	 * @param dateTime date the task will be executed on
+	 * @return formatted string to display
 	 */
 	public String occursOnceLogic(LocalDateTime dateTime) {
 		String desc = "Occurs once. Schedule will be used on ";
@@ -93,12 +87,12 @@ public class Scheduler {
 	}
 	
 	/**
-	 * Metodo que en base a la periodicidad calcula la proxima fecha de ejecucion
-	 * @param currentDateTime fecha actual
-	 * @return next execution time como localdatetime o null
+	 * Methond that calculates next execution date for a recurring task
+	 * @param currentDateTime current date time
+	 * @return next execution date or null if the task has already concluded (end date)
 	 */
 	public LocalDateTime calculateNextExcetutionTime(LocalDateTime currentDateTime) {
-		LocalDateTime next = period.calcularSiguiente(currentDateTime, startDateTime,numPeriod);
+		LocalDateTime next = period.calculateNext(currentDateTime, startDateTime,numPeriod);
 		if (finishDateTime != null && next.isAfter(finishDateTime)) {
 			next = null;
 		}

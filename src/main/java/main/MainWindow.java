@@ -1,11 +1,8 @@
 package main;
 
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import java.awt.GridLayout;
 import javax.swing.BoxLayout;
 import javax.swing.border.TitledBorder;
 import javax.swing.JLabel;
@@ -20,12 +17,9 @@ import javax.swing.JCheckBox;
 import java.awt.Insets;
 import javax.swing.JComboBox;
 import javax.swing.JTextArea;
-import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JSpinner;
 
@@ -39,25 +33,11 @@ public class MainWindow extends JFrame {
 	private JTextField textEndDate;
 	private JTextField textNextExecTime;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					MainWindow frame = new MainWindow();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
+	
 	/**
 	 * Create the frame.
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public MainWindow() {
 		setTitle("Schedule");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -67,7 +47,7 @@ public class MainWindow extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.Y_AXIS));
 		
-		//muevo todas las declaraciones de variables para poder accederlas desdel el mouse clicked event handler
+		//Declare all variables so they are available for the mouse click event handler
 		JPanel panel_2 = new JPanel();
 		JPanel panel_3 = new JPanel();
 		JLabel lblCurrentDate = new JLabel("Current Date:");
@@ -113,6 +93,7 @@ public class MainWindow extends JFrame {
 		btnCalculateNext.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				//error message if task was not enabled
 				if (!chckbxEnabled.isSelected()) {
 					JOptionPane.showMessageDialog(btnCalculateNext, "Please enable the task", 
 							"Error", JOptionPane.ERROR_MESSAGE);
@@ -120,23 +101,30 @@ public class MainWindow extends JFrame {
 				}
 				
 				if (comboBoxType.getSelectedItem() == "Once") {
+					//error message if any required fields are empty
 					if (textDateTime.getText().isBlank() || textStartDate.getText().isBlank()) {
-						JOptionPane.showMessageDialog(btnCalculateNext, "Please set the date to execute the task", 
+						JOptionPane.showMessageDialog(btnCalculateNext, "Please set the dates to execute the task", 
 								"Error", JOptionPane.ERROR_MESSAGE);
 						return;
 					}
+					//format dates
 					LocalDateTime dateTime = DateFormatter.dateFormatterParser(textDateTime.getText());
 					LocalDateTime startDate = DateFormatter.dateFormatterParser(textStartDate.getText());
+					//create the scheduler
 					Scheduler sch = new Scheduler(startDate, null, null, 0);
+					//return the strings to the UI
 					String desc = sch.occursOnceLogic(dateTime);
 					textNextExecTime.setText(textDateTime.getText());
 					textAreaDescription.setText(desc);
+					
 				} else if (comboBoxType.getSelectedItem() == "Recurring") {
+					//error message if any required date is empty
 					if (textCurrentDate.getText().isBlank() || textStartDate.getText().isBlank()) {
-						JOptionPane.showMessageDialog(btnCalculateNext, "Please set the date to execute the task", 
+						JOptionPane.showMessageDialog(btnCalculateNext, "Please set the dates to execute the task", 
 								"Error", JOptionPane.ERROR_MESSAGE);
 						return;
 					}
+					//parse and format the dates and other parameters for the scheduler
 					LocalDateTime start = DateFormatter.dateFormatterParser(textStartDate.getText());
 					LocalDateTime end = null;
 					if (!textEndDate.getText().isBlank()) {
@@ -145,10 +133,13 @@ public class MainWindow extends JFrame {
 					Period per = (Period) comboBoxOccurs.getSelectedItem();
 					int periodInt = (Integer) spinnerDays.getValue();
 					LocalDateTime currentDate = DateFormatter.dateFormatterParser(textCurrentDate.getText());
+					//create the scheduler
 					Scheduler sch = new Scheduler(start, end, per, periodInt);
+					//return the strings to the UI
 					LocalDateTime next = sch.calculateNextExcetutionTime(currentDate);
 					String desc = sch.occursRecurringText(currentDate);
 					if (next == null) {
+						//if the task has ended N/A will be displayed as next date
 						textNextExecTime.setText("N/A");
 					} else {
 						textNextExecTime.setText(DateFormatter.dateStringGetter(next, false, false));

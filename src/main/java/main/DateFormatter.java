@@ -3,14 +3,18 @@ package main;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * Custom class to format the dates to the necessary text formats
+ * @author aaron
+ */
 public class DateFormatter {
 
 	/**
-	 * Metodo que devuelve el string formateado para una fecha
-	 * @param date la fecha a formatear
-	 * @param timeSeparator añade un at entre la fecha y la hora si true
-	 * @param withTime si se quiere hora o no
-	 * @return el string de la fecha
+	 * Method that returns the formatted string for a date according to the needs
+	 * @param date date to format
+	 * @param timeSeparator if true adds 'at' between date and time
+	 * @param withTime if true the returned date format will have time
+	 * @return formatted string
 	 */
 	public static String dateStringGetter(LocalDateTime date, boolean timeSeparator, boolean withTime) {
 		DateTimeFormatter formatter;
@@ -28,8 +32,8 @@ public class DateFormatter {
 	
 	/**
 	 * String date time parser and formatter
-	 * @param date date como string en formato dd/MM/yyyy HH:mm format 
-	 * (HH:mm opcional, se usara una por defecto de ser necesario)
+	 * @param date date as string dd/MM/yyyy HH:mm format 
+	 * (HH:mm optional, default time 00:00 will be used if necessary)
 	 * @return LocalDateTime formated dateTime
 	 */
 	public static LocalDateTime dateFormatterParser(String date) {
