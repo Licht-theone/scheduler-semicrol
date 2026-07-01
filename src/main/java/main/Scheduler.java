@@ -61,15 +61,43 @@ public class Scheduler {
 	}
 	
 	/**
+	 * Metodo que gestiona la logica de periodicidad
+	 * @param startDate fecha de inicio
+	 * @param dateTime fecha de ejecucion
+	 * @param endDate fecha final de ser necesaria
+	 * @param next siguiente fecha de ejecucion
+	 * @param p periodo a usar
+	 * @param n dias, meses, años, semanas, segun el periodo, numero entero
+	 * @return el string a visualizar
+	 */
+	public String occursRecurringText(LocalDateTime currentDateTime) {
+		LocalDateTime next = calculateNextExcetutionTime(currentDateTime);
+		String desc = "Occurs every " + numPeriod + " " + period.stringPeriodo();
+		desc = desc + " Schedule will be used on " + DateFormatter.dateStringGetter(next, false, false) + 
+				" starting on " + DateFormatter.dateStringGetter(startDateTime, false, false);
+		return desc;
+	}
+	
+	/**
+	 * Metodo que gestiona tareas de una sola vez
+	 * @param startDate fecha de inicio
+	 * @param dateTime fecha de ejecucion
+	 * @return string formateado a mostrar
+	 */
+	public String occursOnceLogic(LocalDateTime dateTime) {
+		String desc = "Occurs once. Schedule will be used on ";
+		desc = desc + DateFormatter.dateStringGetter(dateTime, true, true);
+		desc = desc + " starting on " + DateFormatter.dateStringGetter(startDateTime, false, false);
+		return desc;
+	}
+	
+	/**
 	 * Metodo que en base a la periodicidad calcula la proxima fecha de ejecucion
 	 * @param currentDateTime fecha actual
 	 * @return next execution time como localdatetime o null
 	 */
 	public LocalDateTime calculateNextExcetutionTime(LocalDateTime currentDateTime) {
-		if (period == Period.Daily) {
-			return currentDateTime.plusDays(numPeriod);
-		}
-		return null;
+		return period.calcularSiguiente(currentDateTime, numPeriod);
 	}
 	
 }

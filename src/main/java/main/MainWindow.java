@@ -125,28 +125,26 @@ public class MainWindow extends JFrame {
 								"Error", JOptionPane.ERROR_MESSAGE);
 						return;
 					}
-					LocalDateTime dateTime = dateFormatterParser(textDateTime.getText());
-					LocalDateTime startDate = dateFormatterParser(textStartDate.getText());
-					String desc = occursOnceLogic(startDate, dateTime);
-					
+					LocalDateTime dateTime = DateFormatter.dateFormatterParser(textDateTime.getText());
+					LocalDateTime startDate = DateFormatter.dateFormatterParser(textStartDate.getText());
+					Scheduler sch = new Scheduler(startDate, null, null, 0);
+					String desc = sch.occursOnceLogic(dateTime);
+					textNextExecTime.setText(textDateTime.getText());
+					textAreaDescription.setText(desc);
 				} else if (comboBoxType.getSelectedItem() == "Recurring") {
 					if (textCurrentDate.getText().isBlank() || textStartDate.getText().isBlank()) {
 						JOptionPane.showMessageDialog(btnCalculateNext, "Please set the date to execute the task", 
 								"Error", JOptionPane.ERROR_MESSAGE);
 						return;
 					}
-					LocalDateTime start = dateFormatterParser(textStartDate.getText());
+					LocalDateTime start = DateFormatter.dateFormatterParser(textStartDate.getText());
 					LocalDateTime end = null;
 					if (!textEndDate.getText().isBlank()) {
-						end = dateFormatterParser(textEndDate.getText());
+						end = DateFormatter.dateFormatterParser(textEndDate.getText());
 					}
 					Period per = (Period) comboBoxOccurs.getSelectedItem();
 					int period = (Integer) spinnerDays.getValue();
-					LocalDateTime currentDate = dateFormatterParser(textCurrentDate.getText());
-					String desc = occursRecurringText(start, currentDate, end, per, period);
-					LocalDateTime next = occursRecurringLogic(start, currentDate, end, per, period);
-					textNextExecTime.setText(dateStringGetter(next, false, false));
-					textAreaDescription.setText(desc);
+					LocalDateTime currentDate = DateFormatter.dateFormatterParser(textCurrentDate.getText());
 				} else {
 					return;
 				}
@@ -305,87 +303,5 @@ public class MainWindow extends JFrame {
 		gbc_textAreaDescription.gridy = 1;
 		panel.add(textAreaDescription, gbc_textAreaDescription);
 
-	}
-	
-	/**
-	 * String date time parser and formatter
-	 * @param date date como string en formato dd/MM/yyyy HH:mm format 
-	 * (HH:mm opcional, se usara una por defecto de ser necesario)
-	 * @return LocalDateTime formated dateTime
-	 */
-	private LocalDateTime dateFormatterParser(String date) {
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-		if (!date.contains(":")) {
-			//si la fecha no contiene hora se añade una hora por defecto
-			String time = " 00:00";
-			date = date + time;
-		}
-		LocalDateTime currentDate = LocalDateTime.parse(date, formatter);
-		return currentDate;
-	}
-
-	/**
-	 * Metodo privado que devuelve el string formateado para una fecha
-	 * @param date la fecha a formatear
-	 * @param timeSeparator añade un at entre la fecha y la hora si true
-	 * @param withTime si se quiere hora o no
-	 * @return el string de la fecha
-	 */
-	private String dateStringGetter(LocalDateTime date, boolean timeSeparator, boolean withTime) {
-		DateTimeFormatter formatter;
-		if (withTime) {
-			if (timeSeparator) {
-				formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy 'at' HH:mm");
-			} else {
-				formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");	
-			}
-		} else {
-			formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-		}
-		return date.format(formatter);
-	}
-	
-	/**
-	 * Metodo que gestiona tareas de una sola vez
-	 * @param startDate fecha de inicio
-	 * @param dateTime fecha de ejecucion
-	 * @return string formateado a mostrar
-	 */
-	private String occursOnceLogic(LocalDateTime startDate, LocalDateTime dateTime) {
-		String desc = "Occurs once. Schedule will be used on ";
-		desc = desc + dateStringGetter(dateTime, true, true);
-		desc = desc + " starting on " + dateStringGetter(startDate, false, false);
-		return desc;
-	}
-	
-	/**
-	 * Metodo que gestiona la logica de periodicidad
-	 * @param startDate fecha de inicio
-	 * @param dateTime fecha de ejecucion
-	 * @param endDate fecha final de ser necesaria
-	 * @param p periodo a usar
-	 * @param n dias, meses, años, semanas, segun el periodo, numero entero
-	 * @return el string a visualizar
-	 */
-	private String occursRecurringText(LocalDateTime startDate, LocalDateTime currentDateTime, 
-			LocalDateTime endDate, Period p, int n) {
-		String desc = "Occurs every day. Schedule will be used on 08/01/2020 at 14:00 starting on "
-				+ dateStringGetter(startDate, false, false);
-		return desc;
-	}
-	
-	/**
-	 * Metodo que calcula la proxima fecha de ejecucion
-	 * @param startDate fecha de inicio
-	 * @param currentDateTime fecha actual
-	 * @param endDate fecha final
-	 * @param p periodo
-	 * @param n numero del periodo (en dias, meses, años etc)
-	 * @return la fecha calculada
-	 */
-	private LocalDateTime occursRecurringLogic(LocalDateTime startDate, LocalDateTime currentDateTime, 
-			LocalDateTime endDate, Period p, int n) {
-		Scheduler sch = new Scheduler(startDate, endDate, p, n);
-		return sch.calculateNextExcetutionTime(currentDateTime);
 	}
 }
