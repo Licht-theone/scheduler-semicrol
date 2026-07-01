@@ -20,16 +20,23 @@ import java.awt.Insets;
 import javax.swing.JComboBox;
 import javax.swing.JTextArea;
 import java.awt.Component;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JSpinner;
 
 public class MainWindow extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private JTextField textField;
-	private JTextField textField_2;
-	private JTextField textField_1;
-	private JTextField textField_3;
-	private JTextField textField_4;
+	private JTextField textCurrentDate;
+	private JTextField textDateTime;
+	private JTextField textStartDate;
+	private JTextField textEndDate;
+	private JTextField textNextExecTime;
 
 	/**
 	 * Launch the application.
@@ -71,11 +78,16 @@ public class MainWindow extends JFrame {
 		lblCurrentDate.setHorizontalAlignment(SwingConstants.LEFT);
 		panel_3.add(lblCurrentDate);
 		
-		textField = new JTextField();
-		panel_3.add(textField);
-		textField.setColumns(10);
+		textCurrentDate = new JTextField();
+		panel_3.add(textCurrentDate);
+		textCurrentDate.setColumns(10);
 		
 		JButton btnCalculateNext = new JButton("Calculate next date");
+		btnCalculateNext.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+			}
+		});
 		panel_3.add(btnCalculateNext);
 		
 		JPanel panel_2 = new JPanel();
@@ -88,101 +100,103 @@ public class MainWindow extends JFrame {
 		gbl_panel_2.rowWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
 		panel_2.setLayout(gbl_panel_2);
 		
-		JLabel lblNewLabel = new JLabel("Type");
-		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
-		gbc_lblNewLabel.insets = new Insets(0, 0, 5, 5);
-		gbc_lblNewLabel.gridx = 0;
-		gbc_lblNewLabel.gridy = 0;
-		panel_2.add(lblNewLabel, gbc_lblNewLabel);
+		JLabel lblType = new JLabel("Type");
+		GridBagConstraints gbc_lblType = new GridBagConstraints();
+		gbc_lblType.insets = new Insets(0, 0, 5, 5);
+		gbc_lblType.gridx = 0;
+		gbc_lblType.gridy = 0;
+		panel_2.add(lblType, gbc_lblType);
 		
-		JComboBox comboBox = new JComboBox();
-		GridBagConstraints gbc_comboBox = new GridBagConstraints();
-		gbc_comboBox.insets = new Insets(0, 0, 5, 5);
-		gbc_comboBox.fill = GridBagConstraints.HORIZONTAL;
-		gbc_comboBox.gridx = 1;
-		gbc_comboBox.gridy = 0;
-		panel_2.add(comboBox, gbc_comboBox);
+		JComboBox comboBoxType = new JComboBox();
+		comboBoxType.setModel(new DefaultComboBoxModel(new String[] {"Once", "Recurring"}));
+		GridBagConstraints gbc_comboBoxType = new GridBagConstraints();
+		gbc_comboBoxType.insets = new Insets(0, 0, 5, 5);
+		gbc_comboBoxType.fill = GridBagConstraints.HORIZONTAL;
+		gbc_comboBoxType.gridx = 1;
+		gbc_comboBoxType.gridy = 0;
+		panel_2.add(comboBoxType, gbc_comboBoxType);
 		
-		JCheckBox chckbxNewCheckBox = new JCheckBox("Enabled");
-		GridBagConstraints gbc_chckbxNewCheckBox = new GridBagConstraints();
-		gbc_chckbxNewCheckBox.insets = new Insets(0, 0, 5, 5);
-		gbc_chckbxNewCheckBox.gridx = 2;
-		gbc_chckbxNewCheckBox.gridy = 0;
-		panel_2.add(chckbxNewCheckBox, gbc_chckbxNewCheckBox);
+		JCheckBox chckbxEnabled = new JCheckBox("Enabled");
+		GridBagConstraints gbc_chckbxEnabled = new GridBagConstraints();
+		gbc_chckbxEnabled.insets = new Insets(0, 0, 5, 5);
+		gbc_chckbxEnabled.gridx = 2;
+		gbc_chckbxEnabled.gridy = 0;
+		panel_2.add(chckbxEnabled, gbc_chckbxEnabled);
 		
-		JLabel lblNewLabel_1 = new JLabel("DateTime");
-		GridBagConstraints gbc_lblNewLabel_1 = new GridBagConstraints();
-		gbc_lblNewLabel_1.insets = new Insets(0, 0, 5, 5);
-		gbc_lblNewLabel_1.gridx = 0;
-		gbc_lblNewLabel_1.gridy = 1;
-		panel_2.add(lblNewLabel_1, gbc_lblNewLabel_1);
+		JLabel lblDateTime = new JLabel("DateTime");
+		GridBagConstraints gbc_lblDateTime = new GridBagConstraints();
+		gbc_lblDateTime.insets = new Insets(0, 0, 5, 5);
+		gbc_lblDateTime.gridx = 0;
+		gbc_lblDateTime.gridy = 1;
+		panel_2.add(lblDateTime, gbc_lblDateTime);
 		
-		textField_2 = new JTextField();
-		GridBagConstraints gbc_textField_2 = new GridBagConstraints();
-		gbc_textField_2.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textField_2.gridwidth = 5;
-		gbc_textField_2.insets = new Insets(0, 0, 5, 5);
-		gbc_textField_2.gridx = 1;
-		gbc_textField_2.gridy = 1;
-		panel_2.add(textField_2, gbc_textField_2);
-		textField_2.setColumns(10);
+		textDateTime = new JTextField();
+		GridBagConstraints gbc_textDateTime = new GridBagConstraints();
+		gbc_textDateTime.fill = GridBagConstraints.HORIZONTAL;
+		gbc_textDateTime.gridwidth = 5;
+		gbc_textDateTime.insets = new Insets(0, 0, 5, 5);
+		gbc_textDateTime.gridx = 1;
+		gbc_textDateTime.gridy = 1;
+		panel_2.add(textDateTime, gbc_textDateTime);
+		textDateTime.setColumns(10);
 		
-		JLabel lblNewLabel_2 = new JLabel("Occurs");
-		GridBagConstraints gbc_lblNewLabel_2 = new GridBagConstraints();
-		gbc_lblNewLabel_2.insets = new Insets(0, 0, 0, 5);
-		gbc_lblNewLabel_2.gridx = 0;
-		gbc_lblNewLabel_2.gridy = 2;
-		panel_2.add(lblNewLabel_2, gbc_lblNewLabel_2);
+		JLabel lblOccurs = new JLabel("Occurs");
+		GridBagConstraints gbc_lblOccurs = new GridBagConstraints();
+		gbc_lblOccurs.insets = new Insets(0, 0, 0, 5);
+		gbc_lblOccurs.gridx = 0;
+		gbc_lblOccurs.gridy = 2;
+		panel_2.add(lblOccurs, gbc_lblOccurs);
 		
-		JComboBox comboBox_1 = new JComboBox();
-		GridBagConstraints gbc_comboBox_1 = new GridBagConstraints();
-		gbc_comboBox_1.insets = new Insets(0, 0, 0, 5);
-		gbc_comboBox_1.fill = GridBagConstraints.HORIZONTAL;
-		gbc_comboBox_1.gridx = 1;
-		gbc_comboBox_1.gridy = 2;
-		panel_2.add(comboBox_1, gbc_comboBox_1);
+		JComboBox comboBoxOccurs = new JComboBox();
+		comboBoxOccurs.setModel(new DefaultComboBoxModel(new String[] {"Daily"}));
+		GridBagConstraints gbc_comboBoxOccurs = new GridBagConstraints();
+		gbc_comboBoxOccurs.insets = new Insets(0, 0, 0, 5);
+		gbc_comboBoxOccurs.fill = GridBagConstraints.HORIZONTAL;
+		gbc_comboBoxOccurs.gridx = 1;
+		gbc_comboBoxOccurs.gridy = 2;
+		panel_2.add(comboBoxOccurs, gbc_comboBoxOccurs);
 		
-		JLabel lblNewLabel_3 = new JLabel("Every:");
-		GridBagConstraints gbc_lblNewLabel_3 = new GridBagConstraints();
-		gbc_lblNewLabel_3.anchor = GridBagConstraints.EAST;
-		gbc_lblNewLabel_3.insets = new Insets(0, 0, 0, 5);
-		gbc_lblNewLabel_3.gridx = 2;
-		gbc_lblNewLabel_3.gridy = 2;
-		panel_2.add(lblNewLabel_3, gbc_lblNewLabel_3);
+		JLabel lblEvery = new JLabel("Every:");
+		GridBagConstraints gbc_lblEvery = new GridBagConstraints();
+		gbc_lblEvery.anchor = GridBagConstraints.EAST;
+		gbc_lblEvery.insets = new Insets(0, 0, 0, 5);
+		gbc_lblEvery.gridx = 2;
+		gbc_lblEvery.gridy = 2;
+		panel_2.add(lblEvery, gbc_lblEvery);
 		
-		JComboBox comboBox_2 = new JComboBox();
-		GridBagConstraints gbc_comboBox_2 = new GridBagConstraints();
-		gbc_comboBox_2.gridwidth = 3;
-		gbc_comboBox_2.fill = GridBagConstraints.HORIZONTAL;
-		gbc_comboBox_2.insets = new Insets(0, 0, 0, 5);
-		gbc_comboBox_2.gridx = 3;
-		gbc_comboBox_2.gridy = 2;
-		panel_2.add(comboBox_2, gbc_comboBox_2);
+		JSpinner spinnerDays = new JSpinner();
+		GridBagConstraints gbc_spinnerDays = new GridBagConstraints();
+		gbc_spinnerDays.fill = GridBagConstraints.HORIZONTAL;
+		gbc_spinnerDays.gridwidth = 3;
+		gbc_spinnerDays.insets = new Insets(0, 0, 0, 5);
+		gbc_spinnerDays.gridx = 3;
+		gbc_spinnerDays.gridy = 2;
+		panel_2.add(spinnerDays, gbc_spinnerDays);
 		
-		JLabel lblNewLabel_4 = new JLabel("day(s)");
-		GridBagConstraints gbc_lblNewLabel_4 = new GridBagConstraints();
-		gbc_lblNewLabel_4.gridx = 6;
-		gbc_lblNewLabel_4.gridy = 2;
-		panel_2.add(lblNewLabel_4, gbc_lblNewLabel_4);
+		JLabel lblDays = new JLabel("day(s)");
+		GridBagConstraints gbc_lblDays = new GridBagConstraints();
+		gbc_lblDays.gridx = 6;
+		gbc_lblDays.gridy = 2;
+		panel_2.add(lblDays, gbc_lblDays);
 		
 		JPanel panel_1 = new JPanel();
 		panel_1.setBorder(new TitledBorder(null, "Limits", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		contentPane.add(panel_1);
 		panel_1.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
-		JLabel lblNewLabel_5 = new JLabel("Start date:");
-		panel_1.add(lblNewLabel_5);
+		JLabel lblStartDate = new JLabel("Start date:");
+		panel_1.add(lblStartDate);
 		
-		textField_1 = new JTextField();
-		panel_1.add(textField_1);
-		textField_1.setColumns(10);
+		textStartDate = new JTextField();
+		panel_1.add(textStartDate);
+		textStartDate.setColumns(10);
 		
-		JLabel lblNewLabel_6 = new JLabel("End date:");
-		panel_1.add(lblNewLabel_6);
+		JLabel lblEndDate = new JLabel("End date:");
+		panel_1.add(lblEndDate);
 		
-		textField_3 = new JTextField();
-		panel_1.add(textField_3);
-		textField_3.setColumns(10);
+		textEndDate = new JTextField();
+		panel_1.add(textEndDate);
+		textEndDate.setColumns(10);
 		
 		JPanel panel = new JPanel();
 		panel.setBorder(new TitledBorder(null, "Output", TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -194,37 +208,47 @@ public class MainWindow extends JFrame {
 		gbl_panel.rowWeights = new double[]{0.0, 1.0, Double.MIN_VALUE};
 		panel.setLayout(gbl_panel);
 		
-		JLabel lblNewLabel_7 = new JLabel("Next execution time");
-		GridBagConstraints gbc_lblNewLabel_7 = new GridBagConstraints();
-		gbc_lblNewLabel_7.insets = new Insets(0, 0, 5, 5);
-		gbc_lblNewLabel_7.anchor = GridBagConstraints.EAST;
-		gbc_lblNewLabel_7.gridx = 0;
-		gbc_lblNewLabel_7.gridy = 0;
-		panel.add(lblNewLabel_7, gbc_lblNewLabel_7);
+		JLabel lblNextExecTime = new JLabel("Next execution time");
+		GridBagConstraints gbc_lblNextExecTime = new GridBagConstraints();
+		gbc_lblNextExecTime.insets = new Insets(0, 0, 5, 5);
+		gbc_lblNextExecTime.anchor = GridBagConstraints.EAST;
+		gbc_lblNextExecTime.gridx = 0;
+		gbc_lblNextExecTime.gridy = 0;
+		panel.add(lblNextExecTime, gbc_lblNextExecTime);
 		
-		textField_4 = new JTextField();
-		GridBagConstraints gbc_textField_4 = new GridBagConstraints();
-		gbc_textField_4.insets = new Insets(0, 0, 5, 0);
-		gbc_textField_4.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textField_4.gridx = 1;
-		gbc_textField_4.gridy = 0;
-		panel.add(textField_4, gbc_textField_4);
-		textField_4.setColumns(10);
+		textNextExecTime = new JTextField();
+		textNextExecTime.setEditable(false);
+		GridBagConstraints gbc_textNextExecTime = new GridBagConstraints();
+		gbc_textNextExecTime.insets = new Insets(0, 0, 5, 0);
+		gbc_textNextExecTime.fill = GridBagConstraints.HORIZONTAL;
+		gbc_textNextExecTime.gridx = 1;
+		gbc_textNextExecTime.gridy = 0;
+		panel.add(textNextExecTime, gbc_textNextExecTime);
+		textNextExecTime.setColumns(10);
 		
-		JLabel lblNewLabel_8 = new JLabel("Description");
-		GridBagConstraints gbc_lblNewLabel_8 = new GridBagConstraints();
-		gbc_lblNewLabel_8.insets = new Insets(0, 0, 0, 5);
-		gbc_lblNewLabel_8.gridx = 0;
-		gbc_lblNewLabel_8.gridy = 1;
-		panel.add(lblNewLabel_8, gbc_lblNewLabel_8);
+		JLabel lblDescription = new JLabel("Description");
+		GridBagConstraints gbc_lblDescription = new GridBagConstraints();
+		gbc_lblDescription.insets = new Insets(0, 0, 0, 5);
+		gbc_lblDescription.gridx = 0;
+		gbc_lblDescription.gridy = 1;
+		panel.add(lblDescription, gbc_lblDescription);
 		
-		JTextArea textArea = new JTextArea();
-		GridBagConstraints gbc_textArea = new GridBagConstraints();
-		gbc_textArea.fill = GridBagConstraints.BOTH;
-		gbc_textArea.gridx = 1;
-		gbc_textArea.gridy = 1;
-		panel.add(textArea, gbc_textArea);
+		JTextArea textAreaDescription = new JTextArea();
+		textAreaDescription.setEditable(false);
+		GridBagConstraints gbc_textAreaDescription = new GridBagConstraints();
+		gbc_textAreaDescription.fill = GridBagConstraints.BOTH;
+		gbc_textAreaDescription.gridx = 1;
+		gbc_textAreaDescription.gridy = 1;
+		panel.add(textAreaDescription, gbc_textAreaDescription);
 
+	}
+	
+	private LocalDateTime dateFormatterParser(String date) {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+		String time = " 00:00";
+		date.concat(time);
+		LocalDateTime currentDate = LocalDateTime.parse(date, formatter);
+		return currentDate;
 	}
 
 }
